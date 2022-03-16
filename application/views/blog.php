@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
 <body>
+    <div class="container">
     <h1>Artikel Terbaru</h1>
-
+    <?php if ($email != NULL){?>
+        <a class="btn btn-primary" href="<?php echo site_url('/blog/add/')?>">Tambah Artikel</a>
+    <?php }?>
     <?php foreach ($blogs as $key => $blog):?>
         <div class="blog">
             <h2>
@@ -17,8 +14,15 @@
                 </a>
             </h2>
             <?php echo $blog['content']?>
+            <?php if ($email != NULL){?>
+            <a class="btn btn-primary" href="<?php echo site_url('/blog/edit/'.$blog['id'])?>">Edit</a>
+            <a class="btn btn-primary" href="<?php echo site_url('/blog/delete/'.$blog['id'])?>">Delete</a>
+            <?php }?>
+            <?php endforeach; ?>
             
         </div>
-    <?php endforeach; ?>
+    </div>
+
+    
 </body>
 </html>

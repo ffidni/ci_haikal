@@ -1,20 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once("Init.php");
+
 class Blog extends CI_Controller {
-
-
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
-        $this->load->database();
-        $this->load->helper('url');
-        $this->load->model('Blog_model');
+        
     }
+
+
 
 	public function index()
 	{
         $query = $this->Blog_model->getBlogs();
+        $data = Init::initDatas("Homepage", $this);
         $data['blogs'] = $query->result_array();
 		$this->load->view('blog', $data);
 	}
@@ -22,8 +22,8 @@ class Blog extends CI_Controller {
     public function detail($url)
     {
         $query = $this->Blog_model->getSingleBlog("url", $url);
+        $data = Init::initDatas($data['blog']['title'], $this);
         $data['blog'] = $query->row_array();
-        
         $this->load->view('detail', $data);
     }
 
@@ -42,11 +42,14 @@ class Blog extends CI_Controller {
             $is_success =  $this->Blog_model->insertBlog($data);
             if ($is_success){
                 echo "Berhasil $is_success";
+                redirect('/');
             } else {
                 echo "Gagal";
             }
         }
-        $this->load->view('form_add');
+
+        $data = Init::initDatas("Tambah Artikel", $this);
+        $this->load->view('form_add', $data);
     }
 
     public function edit($id)
@@ -58,12 +61,12 @@ class Blog extends CI_Controller {
             $data['url'] = $this->input->post('url');
             $affected =  $this->Blog_model->updateBlog($id, $data);
             echo "$affected data diperbarui";
+            redirect('/');
         }
 
         $query = $this->Blog_model->getSingleBlog("id", $id);
         $data['blog'] = $query->row_array(); 
-
-
+        Init::initDatas("Edit Artikel", $this);
         $this->load->view('form_edit', $data);
     }
 
